@@ -7,14 +7,14 @@ import (
 	"strings"
 
 	"github.com/speedyhoon/forms"
-	"github.com/speedyhoon/util"
+	"github.com/speedyhoon/utl"
 )
 
 const maxLen int = 64
 
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s needed.", f.MinLen, util.Plural(len(inp), " is", "s are"))
+		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s needed.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
 	}
 
@@ -138,7 +138,7 @@ func Str(f *forms.Field, inp ...string) {
 	}
 	length := len(f.Value)
 	if length < f.MinLen {
-		f.Error = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, util.Plural(length, "", ""))
+		f.Error = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, utl.Plural(length, "", ""))
 		return
 	}
 
@@ -199,4 +199,3 @@ func FileReq(f *forms.Field, inp ...string) {
 	//Unmarshal??
 	//Return as interface{}??
 }
-
