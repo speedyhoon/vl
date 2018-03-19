@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/speedyhoon/forms"
-	"github.com/speedyhoon/util"
+	"github.com/speedyhoon/utl"
 )
 
 const maxLen int = 64
