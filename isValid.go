@@ -7,7 +7,7 @@ import (
 	"github.com/speedyhoon/forms"
 )
 
-func IsValidRequest(r *http.Request, f forms.Form) (forms.Form, bool) {
+func IsValidRequest(r *http.Request, fields []forms.Field) ([]forms.Field, bool) {
 	var err error
 	var u *url.URL
 
@@ -19,49 +19,49 @@ func IsValidRequest(r *http.Request, f forms.Form) (forms.Form, bool) {
 	}
 
 	if err != nil {
-		return f, false
+		return fields, false
 	}
 
 	if isGet {
-		return IsValid(u.Query(), f)
+		return IsValid(u.Query(), fields)
 	}
-	return IsValid(r.Form, f)
+	return IsValid(r.Form, fields)
 }
 
 //Is it worth while to auto add failed forms to session so it doesn't have to be done in each http handler?
-func IsValid(urlValues url.Values, f forms.Form) (forms.Form, bool) {
+func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 	if len(urlValues) == 0 {
-		return f, false
+		return fields, false
 	}
 	//Process the post request as normal if len(urlValues) >= len(fields).
 	var fieldValue []string
 	var ok bool
 	isValid := true
-	for i, field := range f.Fields {
+	for i := range fields {
 		/*// Output warning if validation function is not set for this field in the submitted form.
-		if debug && field.v8 == nil {
-			field.Error = "No v8 function setup!"
-			warn.Println("No v8 function setup! for", field.name)
+		if debug && f[i].v8 == nil {
+			f[i].Error = "No validation function setup!"
+			wrn.Println("No validation function setup for", f[i].Name)
 			continue
 		}*/
-		fieldValue, ok = urlValues[field.Name]
+		fieldValue, ok = urlValues[fields[i].Name]
 
 		//if fieldValue is empty and field is required
 		if !ok || len(fieldValue) == 0 || len(fieldValue) == 1 && strings.TrimSpace(fieldValue[0]) == "" {
-			if field.Required {
-				f.Fields[i].Error = "Please fill in this field."
+			if fields[i].Required {
+				fields[i].Error = "Please fill in this field."
 			}
 			//else if field is not required & its contents is empty - don't validate
 		} else {
 			//Otherwise validate user input
-			field.V8(&f.Fields[i], fieldValue...)
+			fields[i].V8(&fields[i], fieldValue...)
 		}
 
 		//Set the first field with failed validation to have focus onscreen
-		if f.Fields[i].Error != "" && isValid {
-			f.Fields[i].AutoFocus = true
+		if fields[i].Error != "" && isValid {
+			fields[i].AutoFocus = true
 			isValid = false
 		}
 	}
-	return f, isValid
+	return fields, isValid
 }
