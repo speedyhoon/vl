@@ -14,7 +14,7 @@ const maxLen int = 64
 
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s needed.", f.MinLen, util.Plural(len(inp), " is", "s are"))
+		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
 		return
 	}
 
@@ -89,7 +89,7 @@ func UintOpt(f *forms.Field, inp ...string) {
 		}
 	}
 	if !found {
-		f.Error = "Please select from one of the options"
+		f.Error = "Please select from one of the options."
 	}
 }
 
@@ -129,7 +129,7 @@ func Str(f *forms.Field, inp ...string) {
 
 	//Check value matches regex
 	if f.Regex != nil && !f.Regex.MatchString(f.Value) {
-		f.Error = "Failed pattern"
+		f.Error = "Failed pattern."
 		return
 	}
 
@@ -160,7 +160,7 @@ func Str(f *forms.Field, inp ...string) {
 			}
 		}
 		if !matched {
-			f.Error = "Value doesn't match any of the options"
+			f.Error = "Value doesn't match any of the options."
 			return
 		}
 	}*/
@@ -199,4 +199,3 @@ func FileReq(f *forms.Field, inp ...string) {
 	//Unmarshal??
 	//Return as interface{}??
 }
-
