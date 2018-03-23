@@ -39,9 +39,8 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 	isValid := true
 	for i := range fields {
 		/*// Output warning if validation function is not set for this field in the submitted form.
-		if debug && f[i].v8 == nil {
-			f[i].Error = "No validation function setup!"
-			wrn.Println("No validation function setup for", f[i].Name)
+		if debug && fields[i].V8 == nil {
+			fields[i].Error = "No validation function setup for " + fields[i].Name
 			continue
 		}*/
 		fieldValue, ok = urlValues[fields[i].Name]
@@ -50,8 +49,10 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 		if !ok || len(fieldValue) == 0 || len(fieldValue) == 1 && strings.TrimSpace(fieldValue[0]) == "" {
 			if fields[i].Required {
 				fields[i].Error = "Please fill in this field."
+			}else{
+				//else if field isn't required & its contents is empty, then don't validate
+				continue
 			}
-			//else if field is not required & its contents is empty - don't validate
 		} else {
 			//Otherwise validate user input
 			fields[i].V8(&fields[i], fieldValue...)
