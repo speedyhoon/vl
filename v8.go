@@ -18,22 +18,24 @@ func UintList(f *forms.Field, inp ...string) {
 		return
 	}
 
-	check := make(map[uint]bool, len(inp))
 	var list []uint
 
-	for _, in := range inp {
-		Uint(f, in)
+	for _, str := range inp {
+		Uint(f, str)
 		if f.Err != "" {
 			return
 		}
 
 		value := f.Uint()
-		_, ok := check[value]
-		if ok {
-			f.Err = "Duplicate values found in list."
-			return
+
+		//check if value isn't already in the list
+		for _, num := range list {
+			if value == num {
+				f.Err = "Duplicate values found in list."
+				return
+			}
 		}
-		check[value] = true
+
 		list = append(list, value)
 	}
 
