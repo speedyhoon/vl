@@ -14,7 +14,7 @@ const maxLen int = 64
 
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
 		return
 	}
 
@@ -23,50 +23,54 @@ func UintList(f *forms.Field, inp ...string) {
 
 	for _, in := range inp {
 		Uint(f, in)
-		if f.Error != "" {
+		if f.Err != "" {
 			return
 		}
 
-		_, ok := check[f.ValueUint]
+		value := f.Uint()
+		_, ok := check[value]
 		if ok {
-			f.Error = "Duplicate values found in list."
+			f.Err = "Duplicate values found in list."
 			return
 		}
-		check[f.ValueUint] = true
-		list = append(list, f.ValueUint)
+		check[value] = true
+		list = append(list, value)
 	}
 
-	f.ValueUintSlice = list
+	f.Value = list
 }
 
 //UintBasic returns false upon validation failure
 func UintBasic(f *forms.Field, inp ...string) bool {
-	f.Value = inp[0]
-	u, err := strconv.ParseUint(strings.TrimSpace(f.Value), 10, sysArch)
+	value := inp[0]
+	u64, err := strconv.ParseUint(strings.TrimSpace(value), 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
-		f.Error = err.Error()
+		f.Err = err.Error()
 		return false
 	}
 
-	return f.Required && uint(u) != 0
+	f.Value = uint(u64)
+	return f.Required && uint(u64) != 0
 }
 
 func Uint(f *forms.Field, inp ...string) {
 	if !UintBasic(f, inp...) {
 		return
 	}
-	if f.ValueUint < uint(f.Min) || f.ValueUint > uint(f.Max) {
-		f.Error = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+
+	value := f.Uint()
+	if value < uint(f.Min) || value > uint(f.Max) {
+		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
 
 	if f.Step == 0 {
 		f.Step = 1
 	}
-	if f.ValueUint%uint(f.Step) != 0 {
-		below := f.ValueUint - f.ValueUint%uint(f.Step)
-		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+uint(f.Step))
+	if value%uint(f.Step) != 0 {
+		below := value - value%uint(f.Step)
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+uint(f.Step))
 		return
 	}
 }
@@ -89,7 +93,7 @@ func UintOpt(f *forms.Field, inp ...string) {
 		}
 	}
 	if !found {
-		f.Error = "Please select from one of the options."
+		f.Err = "Please select from one of the options."
 	}
 }
 
@@ -97,7 +101,7 @@ func Float32(f *forms.Field, inp ...string) {
 	f64, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 32)
 	if err != nil {
 		//Return error if input string failed to convert.
-		f.Error = err.Error()
+		f.Err = err.Error()
 		return
 	}
 	num := float32(f64)
@@ -107,16 +111,15 @@ func Float32(f *forms.Field, inp ...string) {
 		return
 	}
 	if num < float32(f.Min) || num > float32(f.Max) {
-		f.Error = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
 
 	if rem := toFixed(math.Mod(f64, float64(f.Step)), 6); rem != 0 {
-		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
 		return
 	}
-	f.Value = fmt.Sprintf("%v", num)
-	f.ValueFloat32 = num
+	f.Value = num
 }
 
 func toFixed(num, precision float64) float32 {
@@ -125,20 +128,21 @@ func toFixed(num, precision float64) float32 {
 }
 
 func Str(f *forms.Field, inp ...string) {
-	f.Value = strings.TrimSpace(inp[0])
+	value := strings.TrimSpace(inp[0])
+	f.Value = value
 
 	//Check value matches regex
-	if f.Regex != nil && !f.Regex.MatchString(f.Value) {
-		f.Error = "Failed pattern."
+	if f.Regex != nil && !f.Regex.MatchString(value) {
+		f.Err = "Failed pattern."
 		return
 	}
 
 	if f.MinLen == 0 && f.Required {
 		f.MinLen = 1
 	}
-	length := len(f.Value)
+	length := len(value)
 	if length < f.MinLen {
-		f.Error = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, util.Plural(length, "", ""))
+		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, util.Plural(length, "", ""))
 		return
 	}
 
@@ -147,20 +151,21 @@ func Str(f *forms.Field, inp ...string) {
 	}
 	if length > f.MaxLen {
 		//Truncate string instead of raising an error
-		f.Value = f.Value[:f.MaxLen]
+		value = value[:f.MaxLen]
 	}
+	f.Value = value
 
 	//Check value matches one of the options (optional).
 	/*if len(f.Options) > 0 {
 		matched := false
 		for _, option := range f.Options {
-			matched = option.Value == f.Value
+			matched = option.Value == value
 			if matched {
 				break
 			}
 		}
 		if !matched {
-			f.Error = "Value doesn't match any of the options."
+			f.Err = "Value doesn't match any of the options."
 			return
 		}
 	}*/
@@ -172,24 +177,26 @@ func StrReq(f *forms.Field, inp ...string) {
 }
 
 func Regex(f *forms.Field, inp ...string) {
-	f.Value = strings.TrimSpace(inp[0])
-	if !f.Regex.MatchString(f.Value) {
-		f.Error = "ID supplied is incorrect."
+	value := strings.TrimSpace(inp[0])
+	f.Value = value
+	if f.Required && value == "" {
+		f.Err = "Empty ID supplied."
+		return
+	}
+	if !f.Regex.MatchString(value) {
+		f.Err = "ID supplied is incorrect."
 	}
 }
 
 func RegexReq(f *forms.Field, inp ...string) {
 	f.Required = true
-	if inp[0] != "" {
-		Str(f, inp...)
-	}
-	f.Error = "Empty ID supplied."
+	Str(f, inp...)
 }
 
 func Bool(f *forms.Field, inp ...string) {
-	f.Checked = len(strings.TrimSpace(inp[0])) >= 1
-	if f.Required && !f.Checked {
-		f.Error = "Please check this field."
+	f.Value = len(strings.TrimSpace(inp[0])) >= 1
+	if f.Required && !f.Checked() {
+		f.Err = "Please check this field."
 	}
 }
 

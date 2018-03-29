@@ -40,7 +40,7 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 	for i := range fields {
 		/*// Output warning if validation function is not set for this field in the submitted form.
 		if debug && fields[i].V8 == nil {
-			fields[i].Error = "No validation function setup for " + fields[i].Name
+			fields[i].Err = "No validation function setup for " + fields[i].Name
 			continue
 		}*/
 		fieldValue, ok = urlValues[fields[i].Name]
@@ -48,7 +48,7 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 		//if fieldValue is empty and field is required
 		if !ok || len(fieldValue) == 0 || len(fieldValue) == 1 && strings.TrimSpace(fieldValue[0]) == "" {
 			if fields[i].Required {
-				fields[i].Error = "Please fill in this field."
+				fields[i].Err = "Please fill in this field."
 			}else{
 				//else if field isn't required & its contents is empty, then don't validate
 				continue
@@ -59,8 +59,8 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 		}
 
 		//Set the first field with failed validation to have focus onscreen
-		if fields[i].Error != "" && isValid {
-			fields[i].AutoFocus = true
+		if fields[i].Err != "" && isValid {
+			fields[i].Focus = true
 			isValid = false
 		}
 	}
