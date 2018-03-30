@@ -37,21 +37,27 @@ func Str(f *forms.Field, inp ...string) {
 		value = value[:f.MaxLen]
 	}
 	f.Value = value
+}
 
-	//Check value matches one of the options (optional).
-	/*if len(f.Options) > 0 {
-		matched := false
-		for _, option := range f.Options {
-			matched = option.Value == value
-			if matched {
-				break
-			}
+//Check value matches one of the options (optional).
+func StrOpt(f *forms.Field, inp ...string) {
+	Str(f, inp...)
+
+	if f.Err != "" || len(f.Options) < 1 {
+		return
+	}
+
+	var found bool
+	for _, option := range f.Options {
+		if f.Value == option.Value {
+			found = true
+			break
 		}
-		if !matched {
-			f.Err = "Value doesn't match any of the options."
-			return
-		}
-	}*/
+	}
+	if !found {
+		f.Err = "Value doesn't match any of the options."
+		return
+	}
 }
 
 func StrReq(f *forms.Field, inp ...string) {

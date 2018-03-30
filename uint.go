@@ -72,7 +72,7 @@ func UintReq(f *forms.Field, inp ...string) {
 
 //unsigned integer option
 func UintOpt(f *forms.Field, inp ...string) {
-	if !parseUint(f, inp...) {
+	if !parseUint(f, inp...) || len(f.Options) < 1 {
 		return
 	}
 
