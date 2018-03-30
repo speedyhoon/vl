@@ -2,8 +2,6 @@ package v8
 
 import (
 	"fmt"
-	"math"
-	"strconv"
 	"strings"
 
 	"github.com/speedyhoon/forms"
