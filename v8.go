@@ -43,10 +43,10 @@ func UintList(f *forms.Field, inp ...string) {
 	f.Value = list
 }
 
-//UintBasic returns false upon validation failure
-func UintBasic(f *forms.Field, inp ...string) bool {
-	value := inp[0]
-	u64, err := strconv.ParseUint(strings.TrimSpace(value), 10, sysArch)
+//parseUint returns false upon validation failure
+func parseUint(f *forms.Field, inp ...string) bool {
+	value := strings.TrimSpace(inp[0])
+	u64, err := strconv.ParseUint(value, 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
 		f.Err = err.Error()
@@ -58,7 +58,7 @@ func UintBasic(f *forms.Field, inp ...string) bool {
 }
 
 func Uint(f *forms.Field, inp ...string) {
-	if !UintBasic(f, inp...) {
+	if !parseUint(f, inp...) {
 		return
 	}
 
@@ -68,23 +68,29 @@ func Uint(f *forms.Field, inp ...string) {
 		return
 	}
 
+	var step uint
 	if f.Step == 0 {
-		f.Step = 1
+		step = 1
+	}else{
+		step = uint(f.Step)
 	}
+
 	if value%uint(f.Step) != 0 {
-		below := value - value%uint(f.Step)
-		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+uint(f.Step))
+		below := value - value % step
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
 		return
 	}
 }
 
+//Required unsigned integer
 func UintReq(f *forms.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)
 }
 
+//unsigned integer option
 func UintOpt(f *forms.Field, inp ...string) {
-	if !UintBasic(f, inp...) {
+	if !parseUint(f, inp...) {
 		return
 	}
 
