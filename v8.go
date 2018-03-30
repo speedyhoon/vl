@@ -39,10 +39,10 @@ func UintList(f *forms.Field, inp ...string) {
 	f.ValueUintSlice = list
 }
 
-//UintBasic returns false upon validation failure
-func UintBasic(f *forms.Field, inp ...string) bool {
-	f.Value = inp[0]
-	u, err := strconv.ParseUint(strings.TrimSpace(f.Value), 10, sysArch)
+//parseUint returns false upon validation failure
+func parseUint(f *forms.Field, inp ...string) bool {
+	f.Value = strings.TrimSpace(inp[0])
+	u, err := strconv.ParseUint(f.Value, 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
 		f.Error = err.Error()
@@ -53,7 +53,7 @@ func UintBasic(f *forms.Field, inp ...string) bool {
 }
 
 func Uint(f *forms.Field, inp ...string) {
-	if !UintBasic(f, inp...) {
+	if !parseUint(f, inp...) {
 		return
 	}
 	if f.ValueUint < uint(f.Min) || f.ValueUint > uint(f.Max) {
@@ -61,23 +61,29 @@ func Uint(f *forms.Field, inp ...string) {
 		return
 	}
 
+	var step uint
 	if f.Step == 0 {
-		f.Step = 1
+		step = 1
+	}else{
+		step = uint(f.Step)
 	}
+
 	if f.ValueUint%uint(f.Step) != 0 {
-		below := f.ValueUint - f.ValueUint%uint(f.Step)
-		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+uint(f.Step))
+		below := f.ValueUint - f.ValueUint % step
+		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
 		return
 	}
 }
 
+//Required unsigned integer
 func UintReq(f *forms.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)
 }
 
+//unsigned integer option
 func UintOpt(f *forms.Field, inp ...string) {
-	if !UintBasic(f, inp...) {
+	if !parseUint(f, inp...) {
 		return
 	}
 
