@@ -27,9 +27,9 @@ func Uint(f *forms.Field, inp ...string) {
 		step = uint(f.Step)
 	}
 
-	if value%uint(f.Step) != 0 {
-		below := value - value%step
-		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+step)
+	if value % step != 0 {
+		below := value - value % step
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
 		return
 	}
 }
@@ -50,10 +50,10 @@ func UintList(f *forms.Field, inp ...string) {
 
 		value := f.Uint()
 
-		//check if value isn't already in the list
+		//check if this value isn't already in the list
 		for _, num := range list {
 			if value == num {
-				f.Err = "Duplicate values found in list."
+				f.Err = "Duplicate values found in the list."
 				return
 			}
 		}
@@ -90,14 +90,14 @@ func UintOpt(f *forms.Field, inp ...string) {
 
 //parseUint returns false upon validation failure
 func parseUint(f *forms.Field, inp ...string) bool {
-	value := strings.TrimSpace(inp[0])
-	u64, err := strconv.ParseUint(value, 10, sysArch)
+	f.Value = strings.TrimSpace(inp[0])
+	u, err := strconv.ParseUint(f.Str(), 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
 		f.Err = err.Error()
 		return false
 	}
 
-	f.Value = uint(u64)
-	return f.Required && uint(u64) != 0
+	f.Value = uint(u)
+	return f.Required && f.Uint() != 0
 }
