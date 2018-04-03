@@ -12,7 +12,7 @@ func Float32(f *forms.Field, inp ...string) {
 	f64, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 32)
 	if err != nil {
 		//Return error if input string failed to convert.
-		f.Error = err.Error()
+		f.Err = err.Error()
 		return
 	}
 	num := float32(f64)
@@ -22,16 +22,15 @@ func Float32(f *forms.Field, inp ...string) {
 		return
 	}
 	if num < float32(f.Min) || num > float32(f.Max) {
-		f.Error = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
 
 	if rem := toFixed(math.Mod(f64, float64(f.Step)), 6); rem != 0 {
-		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
 		return
 	}
-	f.Value = fmt.Sprintf("%v", num)
-	f.ValueFloat32 = num
+	f.Value = num
 }
 
 func toFixed(num, precision float64) float32 {

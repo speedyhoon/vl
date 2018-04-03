@@ -13,8 +13,9 @@ func Uint(f *forms.Field, inp ...string) {
 	if !parseUint(f, inp...) {
 		return
 	}
-	if f.ValueUint < uint(f.Min) || f.ValueUint > uint(f.Max) {
-		f.Error = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+	value := f.Uint()
+	if value < uint(f.Min) || value > uint(f.Max) {
+		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
 
@@ -25,38 +26,41 @@ func Uint(f *forms.Field, inp ...string) {
 		step = uint(f.Step)
 	}
 
-	if f.ValueUint%uint(f.Step) != 0 {
-		below := f.ValueUint - f.ValueUint % step
-		f.Error = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
+	if value % step != 0 {
+		below := value - value % step
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
 		return
 	}
 }
 
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Error = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
 		return
 	}
 
-	check := make(map[uint]bool, len(inp))
 	var list []uint
 
-	for _, in := range inp {
-		Uint(f, in)
-		if f.Error != "" {
+	for _, str := range inp {
+		Uint(f, str)
+		if f.Err != "" {
 			return
 		}
 
-		_, ok := check[f.ValueUint]
-		if ok {
-			f.Error = "Duplicate values found in list."
-			return
+		value := f.Uint()
+
+		//check if this value isn't already in the list
+		for _, num := range list {
+			if value == num {
+				f.Err = "Duplicate values found in the list."
+				return
+			}
 		}
-		check[f.ValueUint] = true
-		list = append(list, f.ValueUint)
+
+		list = append(list, value)
 	}
 
-	f.ValueUintSlice = list
+	f.Value = list
 }
 
 //Required unsigned integer
@@ -79,19 +83,20 @@ func UintOpt(f *forms.Field, inp ...string) {
 		}
 	}
 	if !found {
-		f.Error = "Please select from one of the options."
+		f.Err = "Please select from one of the options."
 	}
 }
 
 //parseUint returns false upon validation failure
 func parseUint(f *forms.Field, inp ...string) bool {
 	f.Value = strings.TrimSpace(inp[0])
-	u, err := strconv.ParseUint(f.Value, 10, sysArch)
+	u, err := strconv.ParseUint(f.Str(), 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
-		f.Error = err.Error()
+		f.Err = err.Error()
 		return false
 	}
 
-	return f.Required && uint(u) != 0
+	f.Value = uint(u)
+	return f.Required && f.Uint() != 0
 }
