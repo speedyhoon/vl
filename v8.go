@@ -6,7 +6,6 @@ import (
 
 	"github.com/speedyhoon/forms"
 	"github.com/speedyhoon/utl"
-	"time"
 )
 
 const maxLen int = 64
@@ -94,12 +93,4 @@ func FileReq(f *forms.Field, inp ...string) {
 	//maximum length < 2MB?
 	//Unmarshal??
 	//Return as interface{}??
-}
-
-func DateTime(f *forms.Field, inp ...string) {
-	var err error
-	f.Value, err = time.Parse(f.Placeholder, inp[0])
-	if err != nil{
-		f.Err = err.Error()
-	}
 }
