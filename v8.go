@@ -91,7 +91,7 @@ func Bool(f *forms.Field, inp ...string) {
 
 func FileReq(f *forms.Field, inp ...string) {
 	//TODO add validation checks
-	//maxlength < 2MB?
+	//maximum length < 2MB?
 	//Unmarshal??
 	//Return as interface{}??
 }
