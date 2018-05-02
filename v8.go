@@ -6,6 +6,7 @@ import (
 
 	"github.com/speedyhoon/forms"
 	"github.com/speedyhoon/utl"
+	"time"
 )
 
 const maxLen int = 64
@@ -25,7 +26,7 @@ func Str(f *forms.Field, inp ...string) {
 	}
 	length := len(value)
 	if length < f.MinLen {
-		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, util.Plural(length, "", ""))
+		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, utl.Plural(length, "", ""))
 		return
 	}
 
@@ -93,4 +94,12 @@ func FileReq(f *forms.Field, inp ...string) {
 	//maxlength < 2MB?
 	//Unmarshal??
 	//Return as interface{}??
+}
+
+func DateTime(f *forms.Field, inp ...string) {
+	var err error
+	f.Value, err = time.Parse(f.Placeholder, inp[0])
+	if err != nil{
+		f.Err = err.Error()
+	}
 }
