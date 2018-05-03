@@ -35,7 +35,7 @@ func Uint(f *forms.Field, inp ...string) {
 
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, util.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
 	}
 
