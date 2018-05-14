@@ -9,6 +9,7 @@ import (
 	"github.com/speedyhoon/utl"
 )
 
+//Uint validates inp as an unsigned integer
 func Uint(f *forms.Field, inp ...string) {
 	if !parseUint(f, inp...) {
 		return
@@ -22,17 +23,18 @@ func Uint(f *forms.Field, inp ...string) {
 	var step uint
 	if f.Step == 0 {
 		step = 1
-	}else{
+	} else {
 		step = uint(f.Step)
 	}
 
-	if value % step != 0 {
-		below := value - value % step
-		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below + step)
+	if value%step != 0 {
+		below := value - value%step
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %d and %d.", below, below+step)
 		return
 	}
 }
 
+//UintList validates inp as a slice of unsigned integers
 func UintList(f *forms.Field, inp ...string) {
 	if len(inp) < f.MinLen {
 		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
@@ -63,7 +65,7 @@ func UintList(f *forms.Field, inp ...string) {
 	f.Value = list
 }
 
-//Required unsigned integer
+//UintReq enforces an unsigned integer to be required
 func UintReq(f *forms.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)

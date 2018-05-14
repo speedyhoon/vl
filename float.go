@@ -1,13 +1,15 @@
 package v8
 
 import (
-	"github.com/speedyhoon/forms"
-	"strconv"
-	"strings"
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
+
+	"github.com/speedyhoon/forms"
 )
 
+//Float32 validates inp as a float32 input
 func Float32(f *forms.Field, inp ...string) {
 	f64, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 32)
 	if err != nil {
@@ -35,5 +37,5 @@ func Float32(f *forms.Field, inp ...string) {
 
 func toFixed(num, precision float64) float32 {
 	output := math.Pow(10, precision)
-	return float32(int(num * output)) / float32(output)
+	return float32(int(num*output)) / float32(output)
 }
