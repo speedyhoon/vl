@@ -7,6 +7,7 @@ import (
 	"github.com/speedyhoon/forms"
 )
 
+//IsValidRequest gathers the form submitted from GET and POST requests and then calls IsValid()
 func IsValidRequest(r *http.Request, fields []forms.Field) ([]forms.Field, bool) {
 	var err error
 	var u *url.URL
@@ -28,9 +29,10 @@ func IsValidRequest(r *http.Request, fields []forms.Field) ([]forms.Field, bool)
 	return IsValid(r.Form, fields)
 }
 
-//Is it worth while to auto add failed forms to session so it doesn't have to be done in each http handler?
+//IsValid loops through each form field and validates with a function from v8
 func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 	if len(urlValues) == 0 {
+		//TODO Is it worth while to auto add failed forms to session so it doesn't have to be done in each http handler?
 		return fields, false
 	}
 	//Process the post request as normal if len(urlValues) >= len(fields).
@@ -49,7 +51,7 @@ func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
 		if !ok || len(fieldValue) == 0 || len(fieldValue) == 1 && strings.TrimSpace(fieldValue[0]) == "" {
 			if fields[i].Required {
 				fields[i].Err = "Please fill in this field."
-			}else{
+			} else {
 				//else if field isn't required & its contents is empty, then don't validate
 				continue
 			}
