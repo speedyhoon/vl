@@ -1,8 +1,9 @@
 package v8
 
 import (
-	"github.com/speedyhoon/forms"
 	"time"
+
+	"github.com/speedyhoon/forms"
 )
 
 //DateTime validates inp as a time.Time input
