@@ -77,14 +77,14 @@ func UintOpt(f *forms.Field, inp ...string) {
 		return
 	}
 
-	var found bool
+	var ok bool
 	for _, option := range f.Options {
-		if f.Value == option.Value {
-			found = true
+		ok = f.Value == option.Value
+		if ok {
 			break
 		}
 	}
-	if !found {
+	if !ok {
 		f.Err = "Please select from one of the options."
 	}
 }
