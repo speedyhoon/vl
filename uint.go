@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/speedyhoon/forms"
+	"github.com/speedyhoon/frm"
 	"github.com/speedyhoon/utl"
 )
 
 //Uint validates inp as an unsigned integer
-func Uint(f *forms.Field, inp ...string) {
+func Uint(f *frm.Field, inp ...string) {
 	if !parseUint(f, inp...) {
 		return
 	}
@@ -36,7 +36,7 @@ func Uint(f *forms.Field, inp ...string) {
 }
 
 //UintList validates inp as a slice of unsigned integers
-func UintList(f *forms.Field, inp ...string) {
+func UintList(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
 		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
@@ -67,13 +67,13 @@ func UintList(f *forms.Field, inp ...string) {
 }
 
 //UintReq enforces an unsigned integer to be required
-func UintReq(f *forms.Field, inp ...string) {
+func UintReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)
 }
 
 //UintOpt unsigned integer option slice
-func UintOpt(f *forms.Field, inp ...string) {
+func UintOpt(f *frm.Field, inp ...string) {
 	if !parseUint(f, inp...) || len(f.Options) < 1 {
 		return
 	}
@@ -91,7 +91,7 @@ func UintOpt(f *forms.Field, inp ...string) {
 }
 
 //parseUint returns false upon validation failure
-func parseUint(f *forms.Field, inp ...string) bool {
+func parseUint(f *frm.Field, inp ...string) bool {
 	f.Value = strings.TrimSpace(inp[0])
 	u, err := strconv.ParseUint(f.Str(), 10, sysArch)
 	if err != nil {

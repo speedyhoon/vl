@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/speedyhoon/forms"
+	"github.com/speedyhoon/frm"
 )
 
 //Float32 validates inp as a float32 input
-func Float32(f *forms.Field, inp ...string) {
+func Float32(f *frm.Field, inp ...string) {
 	f64, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 32)
 	if err != nil {
 		//Return error if input string failed to convert.

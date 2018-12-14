@@ -5,11 +5,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/speedyhoon/forms"
+	"github.com/speedyhoon/frm"
 )
 
 //IsValidRequest gathers the form submitted from GET and POST requests and then calls IsValid()
-func IsValidRequest(r *http.Request, fields []forms.Field) ([]forms.Field, bool) {
+func IsValidRequest(r *http.Request, fields []frm.Field) ([]frm.Field, bool) {
 	var err error
 	var u *url.URL
 
@@ -31,7 +31,7 @@ func IsValidRequest(r *http.Request, fields []forms.Field) ([]forms.Field, bool)
 }
 
 //IsValid loops through each form field and validates with a function from v8
-func IsValid(urlValues url.Values, fields []forms.Field) ([]forms.Field, bool) {
+func IsValid(urlValues url.Values, fields []frm.Field) ([]frm.Field, bool) {
 	if len(urlValues) == 0 {
 		//TODO Is it worth while to auto add failed forms to session so it doesn't have to be done in each http handler?
 		return fields, false
