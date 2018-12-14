@@ -26,7 +26,7 @@ func Str(f *forms.Field, inp ...string) {
 	}
 	l := len(value)
 	if l < f.MinLen {
-		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, utl.Plural(length, "", ""))
+		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, l, utl.Plural(l, "", ""))
 		return
 	}
 
