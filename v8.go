@@ -24,18 +24,19 @@ func Str(f *forms.Field, inp ...string) {
 	if f.MinLen == 0 && f.Required {
 		f.MinLen = 1
 	}
-	length := len(value)
-	if length < f.MinLen {
-		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, length, utl.Plural(length, "", ""))
+	l := len(value)
+	if l < f.MinLen {
+		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%v).", f.MinLen, l, utl.Plural(l, "", ""))
 		return
 	}
 
 	if f.MaxLen == 0 {
 		f.MaxLen = maxLen
 	}
-	if length > f.MaxLen {
+	if l > f.MaxLen {
 		//Truncate string instead of raising an error
-		value = value[:f.MaxLen]
+		f.Value = value[:f.MaxLen]
+		return
 	}
 	f.Value = value
 }
@@ -48,14 +49,14 @@ func StrOpt(f *forms.Field, inp ...string) {
 		return
 	}
 
-	var found bool
+	var ok bool
 	for _, option := range f.Options {
-		if f.Value == option.Value {
-			found = true
+		ok = f.Value == option.Value
+		if ok {
 			break
 		}
 	}
-	if !found {
+	if !ok {
 		f.Err = "Value doesn't match any of the options."
 		return
 	}
