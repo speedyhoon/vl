@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/speedyhoon/forms"
+	"github.com/speedyhoon/frm"
 	"github.com/speedyhoon/utl"
 )
 
 const maxLen int = 64
 
 //Str validates inp as a string input
-func Str(f *forms.Field, inp ...string) {
+func Str(f *frm.Field, inp ...string) {
 	value := strings.TrimSpace(inp[0])
 	f.Value = value
 
@@ -42,7 +42,7 @@ func Str(f *forms.Field, inp ...string) {
 }
 
 //StrOpt validates inp as a string array. Check value matches one of the options (optional).
-func StrOpt(f *forms.Field, inp ...string) {
+func StrOpt(f *frm.Field, inp ...string) {
 	Str(f, inp...)
 
 	if f.Err != "" || len(f.Options) < 1 {
@@ -63,13 +63,13 @@ func StrOpt(f *forms.Field, inp ...string) {
 }
 
 //StrReq validates inp as a required string input
-func StrReq(f *forms.Field, inp ...string) {
+func StrReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Str(f, inp...)
 }
 
 //Regex validates inp as a input with a regular expression check
-func Regex(f *forms.Field, inp ...string) {
+func Regex(f *frm.Field, inp ...string) {
 	f.Value = strings.TrimSpace(inp[0])
 	if f.Required && f.Str() == "" {
 		f.Err = "Empty ID supplied."
@@ -81,13 +81,13 @@ func Regex(f *forms.Field, inp ...string) {
 }
 
 //RegexReq validates with Regex() as a required field
-func RegexReq(f *forms.Field, inp ...string) {
+func RegexReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Str(f, inp...)
 }
 
 //Bool validates inp as a boolean field
-func Bool(f *forms.Field, inp ...string) {
+func Bool(f *frm.Field, inp ...string) {
 	f.Value = len(strings.TrimSpace(inp[0])) >= 1
 	if f.Required && !f.Checked() {
 		f.Err = "Please check this field."
@@ -95,7 +95,7 @@ func Bool(f *forms.Field, inp ...string) {
 }
 
 //FileReq validates as a file required field
-func FileReq(f *forms.Field, inp ...string) {
+func FileReq(f *frm.Field, inp ...string) {
 	//TODO add validation checks
 	//maximum length < 2MB?
 	//Unmarshal??

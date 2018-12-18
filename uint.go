@@ -66,7 +66,7 @@ func UintList(f *frm.Field, inp ...string) {
 }
 
 //UintReq enforces an unsigned integer to be required
-func UintReq(f *forms.Field, inp ...string) {
+func UintReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)
 }
