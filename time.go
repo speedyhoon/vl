@@ -1,8 +1,9 @@
-package v8
+package vl
 
 import (
-	"github.com/speedyhoon/frm"
 	"time"
+
+	"github.com/speedyhoon/frm"
 )
 
 //DateTime validates inp as a time.Time input

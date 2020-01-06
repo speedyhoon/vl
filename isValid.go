@@ -1,10 +1,11 @@
-package v8
+package vl
 
 import (
-	"github.com/speedyhoon/frm"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/speedyhoon/frm"
 )
 
 //IsValidRequest gathers the form submitted from GET and POST requests and then calls IsValid()
