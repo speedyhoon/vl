@@ -91,8 +91,7 @@ func UintOpt(f *frm.Field, inp ...string) {
 
 //parseUint returns false upon validation failure
 func parseUint(f *frm.Field, inp ...string) bool {
-	f.Value = strings.TrimSpace(inp[0])
-	u, err := strconv.ParseUint(f.Str(), 10, sysArch)
+	u, err := strconv.ParseUint(strings.TrimSpace(inp[0]), 10, sysArch)
 	if err != nil {
 		//Return error if input string failed to convert.
 		f.Err = err.Error()
