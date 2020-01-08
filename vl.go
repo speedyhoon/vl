@@ -36,9 +36,7 @@ func Str(f *frm.Field, inp ...string) {
 	if l > f.MaxLen {
 		//Truncate string instead of raising an error
 		f.Value = value[:f.MaxLen]
-		return
 	}
-	f.Value = value
 }
 
 //StrOpt validates inp as a string array. Check value matches one of the options (optional).
