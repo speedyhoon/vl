@@ -18,6 +18,7 @@ func Float32(f *frm.Field, inp ...string) {
 		return
 	}
 	num := float32(f64)
+	f.Value = num
 
 	if !f.Required && num == 0 {
 		//f.ValueFloat32 is zero by default so assigning zero isn't required
@@ -31,14 +32,13 @@ func Float32(f *frm.Field, inp ...string) {
 
 	if rem := toFixed32(math.Mod(f64, float64(f.Step)), 6); rem != 0 {
 		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
-		return
 	}
-	f.Value = num
 }
 
 //Float64 validates inp as a float64 input
 func Float64(f *frm.Field, inp ...string) {
 	num, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 64)
+	f.Value = num
 	if err != nil {
 		//Return error if input string failed to convert.
 		f.Err = err.Error()
@@ -57,9 +57,7 @@ func Float64(f *frm.Field, inp ...string) {
 
 	if rem := toFixed(math.Mod(num, float64(f.Step)), 6); rem != 0 {
 		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+float64(f.Step))
-		return
 	}
-	f.Value = num
 }
 
 func toFixed32(num, precision float64) float32 {
