@@ -23,7 +23,8 @@ func Float32(f *frm.Field, inp ...string) {
 		//f.ValueFloat32 is zero by default so assigning zero isn't required
 		return
 	}
-	if num < float32(f.Min) || num > float32(f.Max) {
+
+	if f.Min != nil && num < f.Min.(float32) || f.Max != nil && num > f.Max.(float32) {
 		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
