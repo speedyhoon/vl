@@ -11,7 +11,7 @@ import (
 
 // Uint64 validates inp as an unsigned 64-bit integer
 func Uint64(f *frm.Field, inp ...string) {
-	if !parseUint(f, inp...) {
+	if !parseUint64(f, inp...) {
 		return
 	}
 	value := f.Uint64()
