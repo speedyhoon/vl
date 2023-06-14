@@ -15,7 +15,7 @@ func Uint32(f *frm.Field, inp ...string) {
 		return
 	}
 	value := f.Uint32()
-	if f.Min != nil && value < f.Min.(uint) || f.Max != nil && value > f.Max.(uint) {
+	if f.Min != nil && value < f.Min.(uint32) || f.Max != nil && value > f.Max.(uint32) {
 		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
 		return
 	}
