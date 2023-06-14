@@ -11,7 +11,7 @@ import (
 
 // Uint32 validates inp as an unsigned 32-bit integer
 func Uint32(f *frm.Field, inp ...string) {
-	if !parseUint(f, inp...) {
+	if !parseUint32(f, inp...) {
 		return
 	}
 	value := f.Uint32()
