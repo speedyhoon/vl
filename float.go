@@ -9,11 +9,11 @@ import (
 	"github.com/speedyhoon/frm"
 )
 
-//Float32 validates inp as a float32 input
+// Float32 validates inp as a float32 input.
 func Float32(f *frm.Field, inp ...string) {
 	f64, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 32)
 	if err != nil {
-		//Return error if input string failed to convert.
+		// Return error if input string failed to convert.
 		f.Err = err.Error()
 		return
 	}
@@ -21,7 +21,7 @@ func Float32(f *frm.Field, inp ...string) {
 	f.Value = num
 
 	if !f.Required && num == 0 {
-		//f.ValueFloat32 is zero by default so assigning zero isn't required
+		// f.ValueFloat32 is zero by default so assigning zero isn't required.
 		return
 	}
 
@@ -35,18 +35,18 @@ func Float32(f *frm.Field, inp ...string) {
 	}
 }
 
-//Float64 validates inp as a float64 input
+// Float64 validates inp as a float64 input
 func Float64(f *frm.Field, inp ...string) {
 	num, err := strconv.ParseFloat(strings.TrimSpace(inp[0]), 64)
 	f.Value = num
 	if err != nil {
-		//Return error if input string failed to convert.
+		// Return error if input string failed to convert.
 		f.Err = err.Error()
 		return
 	}
 
 	if !f.Required && num == 0 {
-		//f.ValueFloat64 is zero by default so assigning zero isn't required
+		// f.ValueFloat64 is zero by default so assigning zero isn't required.
 		return
 	}
 

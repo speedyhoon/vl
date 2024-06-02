@@ -10,12 +10,12 @@ import (
 
 const maxLen int = 64
 
-//Str validates inp as a string input
+// Str validates inp as a string input.
 func Str(f *frm.Field, inp ...string) {
 	value := strings.TrimSpace(inp[0])
 	f.Value = value
 
-	//Check value matches regex
+	// Check value matches regex.
 	if f.Regex != nil && !f.Regex.MatchString(value) {
 		f.Err = "Failed pattern."
 		return
@@ -34,12 +34,12 @@ func Str(f *frm.Field, inp ...string) {
 		f.MaxLen = maxLen
 	}
 	if l > f.MaxLen {
-		//Truncate string instead of raising an error
+		// Truncate string instead of raising an error.
 		f.Value = value[:f.MaxLen]
 	}
 }
 
-//StrOpt validates inp as a string array. Check value matches one of the options (optional).
+// StrOpt validates inp as a string array. Check value matches one of the options (optional).
 func StrOpt(f *frm.Field, inp ...string) {
 	Str(f, inp...)
 
@@ -60,13 +60,13 @@ func StrOpt(f *frm.Field, inp ...string) {
 	}
 }
 
-//StrReq validates inp as a required string input
+// StrReq validates inp as a required string input.
 func StrReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Str(f, inp...)
 }
 
-//Regex validates inp as a input with a regular expression check
+// Regex validates inp as a input with a regular expression check.
 func Regex(f *frm.Field, inp ...string) {
 	f.Value = strings.TrimSpace(inp[0])
 	if f.Required && f.Str() == "" {
@@ -78,13 +78,13 @@ func Regex(f *frm.Field, inp ...string) {
 	}
 }
 
-//RegexReq validates with Regex() as a required field
+// RegexReq validates with Regex() as a required field.
 func RegexReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Str(f, inp...)
 }
 
-//Bool validates inp as a boolean field
+// Bool validates inp as a boolean field.
 func Bool(f *frm.Field, inp ...string) {
 	f.Value = len(strings.TrimSpace(inp[0])) >= 1
 	if f.Required && !f.Checked() {
@@ -92,7 +92,7 @@ func Bool(f *frm.Field, inp ...string) {
 	}
 }
 
-//FileReq validates as a file required field
+// FileReq validates as a file required field.
 func FileReq(f *frm.Field, inp ...string) {
 	//TODO add validation checks
 	//maximum length < 2MB?

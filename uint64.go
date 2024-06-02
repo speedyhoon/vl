@@ -9,7 +9,7 @@ import (
 	"github.com/speedyhoon/utl"
 )
 
-// Uint64 validates inp as an unsigned 64-bit integer
+// Uint64 validates inp as an unsigned 64-bit integer.
 func Uint64(f *frm.Field, inp ...string) {
 	if !parseUint64(f, inp...) {
 		return
@@ -34,7 +34,7 @@ func Uint64(f *frm.Field, inp ...string) {
 	}
 }
 
-// Uint64List validates inp as a slice of unsigned 64-bit integers
+// Uint64List validates inp as a slice of unsigned 64-bit integers.
 func Uint64List(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
 		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
@@ -51,7 +51,7 @@ func Uint64List(f *frm.Field, inp ...string) {
 
 		value := f.Uint64()
 
-		//check if this value isn't already in the list
+		// Check if this value isn't already in the list.
 		for _, num := range list {
 			if value == num {
 				f.Err = "Duplicate values found in the list."
@@ -65,13 +65,13 @@ func Uint64List(f *frm.Field, inp ...string) {
 	f.Value = list
 }
 
-// Uint64Req enforces an unsigned 64-bit integer to be required
+// Uint64Req enforces an unsigned 64-bit integer to be required.
 func Uint64Req(f *frm.Field, inp ...string) {
 	f.Required = true
 	Uint64(f, inp...)
 }
 
-// Uint64Opt unsigned 64-bit integer option slice
+// Uint64Opt unsigned 64-bit integer option slice.
 func Uint64Opt(f *frm.Field, inp ...string) {
 	if !parseUint64(f, inp...) || len(f.Options) < 1 {
 		return
@@ -89,11 +89,11 @@ func Uint64Opt(f *frm.Field, inp ...string) {
 	}
 }
 
-// parseUint64 returns false upon validation failure
+// parseUint64 returns false upon validation failure.
 func parseUint64(f *frm.Field, inp ...string) bool {
 	u, err := strconv.ParseUint(strings.TrimSpace(inp[0]), 10, 64)
 	if err != nil {
-		//Return error if input string failed to convert.
+		// Return error if input string failed to convert.
 		f.Err = err.Error()
 		return false
 	}
