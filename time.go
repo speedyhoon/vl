@@ -7,7 +7,7 @@ import (
 	"github.com/speedyhoon/frm"
 )
 
-//DateTime validates inp as a time.Time input
+// DateTime validates inp as a time.Time input.
 func DateTime(f *frm.Field, inp ...string) {
 	value, err := time.Parse(f.Placeholder, inp[0])
 	f.Value = value

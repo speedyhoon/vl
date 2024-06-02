@@ -9,7 +9,7 @@ import (
 	"github.com/speedyhoon/utl"
 )
 
-//Uint validates inp as an unsigned integer
+// Uint validates inp as an unsigned integer.
 func Uint(f *frm.Field, inp ...string) {
 	if !parseUint(f, inp...) {
 		return
@@ -34,7 +34,7 @@ func Uint(f *frm.Field, inp ...string) {
 	}
 }
 
-//UintList validates inp as a slice of unsigned integers
+// UintList validates inp as a slice of unsigned integers.
 func UintList(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
 		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
@@ -51,7 +51,7 @@ func UintList(f *frm.Field, inp ...string) {
 
 		value := f.Uint()
 
-		//check if this value isn't already in the list
+		// Check if this value isn't already in the list.
 		for _, num := range list {
 			if value == num {
 				f.Err = "Duplicate values found in the list."
@@ -65,13 +65,13 @@ func UintList(f *frm.Field, inp ...string) {
 	f.Value = list
 }
 
-//UintReq enforces an unsigned integer to be required
+// UintReq enforces an unsigned integer to be required.
 func UintReq(f *frm.Field, inp ...string) {
 	f.Required = true
 	Uint(f, inp...)
 }
 
-//UintOpt unsigned integer option slice
+// UintOpt unsigned integer option slice.
 func UintOpt(f *frm.Field, inp ...string) {
 	if !parseUint(f, inp...) || len(f.Options) < 1 {
 		return
@@ -89,7 +89,7 @@ func UintOpt(f *frm.Field, inp ...string) {
 	}
 }
 
-//parseUint returns false upon validation failure
+// parseUint returns false upon validation failure.
 func parseUint(f *frm.Field, inp ...string) bool {
 	u, err := strconv.ParseUint(strings.TrimSpace(inp[0]), 10, sysArch)
 	if err != nil {
