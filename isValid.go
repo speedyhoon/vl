@@ -13,7 +13,7 @@ func IsValidRequest(r *http.Request, fields []frm.Field) ([]frm.Field, bool) {
 	var err error
 	var u *url.URL
 
-	isGet := r.Method == "GET"
+	isGet := r.Method == http.MethodGet
 	if isGet {
 		u, err = url.Parse(r.RequestURI)
 	} else {
