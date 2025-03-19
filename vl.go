@@ -66,7 +66,7 @@ func StrReq(f *frm.Field, inp ...string) {
 	Str(f, inp...)
 }
 
-// Regex validates inp as a input with a regular expression check.
+// Regex validates inp as an input with a regular expression check.
 func Regex(f *frm.Field, inp ...string) {
 	f.Value = strings.TrimSpace(inp[0])
 	if f.Required && f.Str() == "" {
