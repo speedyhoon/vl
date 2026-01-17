@@ -26,12 +26,12 @@ func Float32(f *frm.Field, inp ...string) {
 	}
 
 	if f.Min != nil && num < f.Min.(float32) || f.Max != nil && num > f.Max.(float32) {
-		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %f and %f.", f.Min, f.Max)
 		return
 	}
 
 	if rem := toFixed32(math.Mod(f64, float64(f.Step)), 6); rem != 0 {
-		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+f.Step)
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %f and %f.", num-rem, num-rem+f.Step)
 	}
 }
 
@@ -51,12 +51,12 @@ func Float64(f *frm.Field, inp ...string) {
 	}
 
 	if f.Min != nil && num < f.Min.(float64) || f.Max != nil && num > f.Max.(float64) {
-		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %f and %f.", f.Min, f.Max)
 		return
 	}
 
 	if rem := toFixed(math.Mod(num, float64(f.Step)), 6); rem != 0 {
-		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %v and %v.", num-rem, num-rem+float64(f.Step))
+		f.Err = fmt.Sprintf("Please enter a valid value. The two nearest values are %f and %f.", num-rem, num-rem+float64(f.Step))
 	}
 }
 
