@@ -58,7 +58,7 @@ func IsValid(urlValues url.Values, fields []frm.Field) ([]frm.Field, bool) {
 			}
 		} else {
 			// Otherwise validate user input.
-			fields[i].V8(&fields[i], fieldValue...)
+			fields[i].Vl(&fields[i], fieldValue...)
 		}
 
 		// Set the first field with failed validation to have focus onscreen.
