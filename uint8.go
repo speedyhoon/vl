@@ -16,7 +16,7 @@ func Uint8(f *frm.Field, inp ...string) {
 	}
 	value := f.Uint8()
 	if f.Min != nil && value < f.Min.(uint8) || f.Max != nil && value > f.Max.(uint8) {
-		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %d and %d.", f.Min, f.Max)
 		return
 	}
 
@@ -37,7 +37,7 @@ func Uint8(f *frm.Field, inp ...string) {
 // Uint8List validates inp as a slice of unsigned 8-bit integers.
 func Uint8List(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %d item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
 	}
 

@@ -16,7 +16,7 @@ func Uint32(f *frm.Field, inp ...string) {
 	}
 	value := f.Uint32()
 	if f.Min != nil && value < f.Min.(uint32) || f.Max != nil && value > f.Max.(uint32) {
-		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %d and %d.", f.Min, f.Max)
 		return
 	}
 
@@ -37,7 +37,7 @@ func Uint32(f *frm.Field, inp ...string) {
 // Uint32List validates inp as a slice of unsigned 32-bit integers.
 func Uint32List(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %d item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
 	}
 

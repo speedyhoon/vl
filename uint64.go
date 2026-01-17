@@ -16,7 +16,7 @@ func Uint64(f *frm.Field, inp ...string) {
 	}
 	value := f.Uint64()
 	if f.Min != nil && value < f.Min.(uint64) || f.Max != nil && value > f.Max.(uint64) {
-		f.Err = fmt.Sprintf("Must be between %v and %v.", f.Min, f.Max)
+		f.Err = fmt.Sprintf("Must be between %d and %d.", f.Min, f.Max)
 		return
 	}
 
@@ -37,7 +37,7 @@ func Uint64(f *frm.Field, inp ...string) {
 // Uint64List validates inp as a slice of unsigned 64-bit integers.
 func Uint64List(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Err = fmt.Sprintf("Not enough items selected. At least %v item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %d item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
 		return
 	}
 
