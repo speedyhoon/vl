@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/speedyhoon/frm"
-	"github.com/speedyhoon/utl"
+	"github.com/speedyhoon/plrl"
 )
 
 const maxLen int = 64
@@ -26,7 +26,7 @@ func Str(f *frm.Field, inp ...string) {
 	}
 	l := len(value)
 	if l < f.MinLen {
-		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%s).", f.MinLen, l, utl.Plural(l, "", ""))
+		f.Err = fmt.Sprintf("Please lengthen this text to %d characters or more (you are currently using %d character%s).", f.MinLen, l, plrl.S(l))
 		return
 	}
 

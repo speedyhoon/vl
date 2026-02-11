@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/speedyhoon/frm"
-	"github.com/speedyhoon/utl"
+	"github.com/speedyhoon/plrl"
 )
 
 // Uint validates inp as an unsigned integer.
@@ -38,7 +38,7 @@ func Uint(f *frm.Field, inp ...string) {
 // UintList validates inp as a slice of unsigned integers.
 func UintList(f *frm.Field, inp ...string) {
 	if len(inp) < f.MinLen {
-		f.Err = fmt.Sprintf("Not enough items selected. At least %d item%s required.", f.MinLen, utl.Plural(len(inp), " is", "s are"))
+		f.Err = fmt.Sprintf("Not enough items selected. At least %d item%s required.", f.MinLen, plrl.Any(len(inp), " is", "s are"))
 		return
 	}
 

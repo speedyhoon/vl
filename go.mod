@@ -1,8 +1,9 @@
 module github.com/speedyhoon/vl
 
-go 1.20
+go 1.21.4
 
-require (
-	github.com/speedyhoon/frm v0.0.0-20230614025350-2be465b7c98f
-	github.com/speedyhoon/utl v0.0.0-20211208115559-579b0d41ba64
-)
+toolchain go1.24.4
+
+require github.com/speedyhoon/frm v0.0.0-20260121042211-4b724f12575e
+
+require github.com/speedyhoon/plrl v0.0.0-20260211001811-4633f847e897
